@@ -4,7 +4,7 @@ const { StatusCodes } = require('http-status-codes');
 class BadRequest extends CustomError{
     constructor(message) {
         super(message);
-        this.StatusCode = StatusCodes.BAD_REQUEST;
+        this.statusCode = StatusCodes.BAD_REQUEST;
     };
 };
 
