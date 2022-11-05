@@ -31,9 +31,15 @@ userSchema.pre('save', async function () {
 
 // json web token
 userSchema.methods.generateToken = function () {
-    const token = jwt.sign({ userId: this._id, username: this.name }, process.env.JWT_KEY, {expiresIn: process.env.JWT_EXPIRY});
+    const token = jwt.sign({ userId: this._id, username: this.name }, process.env.JWT_KEY, { expiresIn: process.env.JWT_EXPIRY });
     return token;
-}
+};
+
+userSchema.methods.validatePassword = async function (candidatePassword) {
+    const valid = await bcrypt.compare(candidatePassword, this.password);
+    return valid;
+};
+// NOTE:: don't use arrow functions in all those previous methods to keep [this] of the object
 
 const User = mongoose.model('user', userSchema);
 module.exports = User;
