@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -15,11 +17,16 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please provide a password'],
-        minlength: 10
+        minlength: 8
         // maxlength: 50 // to be removed after hashing passwords
     }
 });
 
-const User = mongoose.model('user', userSchema);
+// hash password here instead of in the controllers
+userSchema.pre('save', async function () {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
+const User = mongoose.model('user', userSchema);
 module.exports = User;
