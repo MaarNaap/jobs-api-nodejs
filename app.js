@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const connectDB = require('./db/connect');
+const authorizeUser = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
 const notFound = require('./middleware/notFound');
 const auth = require('./routes/auth');
@@ -14,7 +15,7 @@ const app = express();
 app.use(express.json());
 // routers
 app.use('/api/v1', auth);
-app.use('/api/v1/jobs', jobs);
+app.use('/api/v1/jobs', authorizeUser, jobs);
 
 // 404 and error handler middleware
 app.use(notFound);
