@@ -17,6 +17,10 @@ function errorHandler(err, req, res, next) {
     if (err.type === 'entity.parse.failed') {
         err.message = `Invalid json : \r\n ${err.body}`
     };
+    if (err.code === 11000) {
+        err.statusCode = StatusCodes.BAD_REQUEST;
+        err.message = 'This user is already registered. Login or try another email address.';
+    };
     // return res.status(err.statusCode || 500).send(err);
     return res.status(err.statusCode || 500).send(err.message || {myMsg: 'Vague Server Error::', error: err});
 };
